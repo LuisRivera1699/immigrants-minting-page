@@ -1,13 +1,318 @@
+html {
+  margin: 0;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  padding: 0 50px;
+  font-family: 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
+  background: black;
+  color: white;
+  height: 100vh;
+}
+
+#root {
+  height: 100%;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* TEXT STYLES */
+
+h1, h2, p, td, th, p.mint-counter {
+  line-height: 1;
+  text-align: center;
+}
+
+h1 {
+  font-size: 3rem;
+  font-weight: 400;
+  text-shadow: 0 -2px 8px rgb(128 128 128);
+}
+
+h2 {
+  font-size: 2.5rem;
+  font-weight: 400;
+}
+
+p, td, th, p.mint-counter, button, .t-button, .mint-button {
+  font-size: 1.3rem;
+}
+
+button, .t-button, .mint-button {
+  color: white;
+}
+
+.pink {
+  color: #C8168F;
+}
+
+.blue {
+  color: #5966DD;
+}
+
+/* HEADER */
+
+header {
+  padding: 15px 0;
+}
+
+header > div > img {
+  height: 67px;
+}
+
+.flex-space-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.twitter {
+  margin-left: 10px;
+}
+
+/* MAIN LAYOUT */
+
+.main-layout {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.mint-content {
+  margin-top: 30px;
+}
+
+.flex-m {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+
+.flex-m > div {
+  width: 50%;
+}
+
+/* GIF COMPONENT */
+.gif-container {
+  background-image: linear-gradient(to right, #5966dd, #c8168f);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 42px;
+  height: 70%;
+}
+
+.gif {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 42px;
+}
+
+/* MINT AREA */
+
+.subtitle {
+  margin-bottom: 20px;
+}
+
+.c {
+  flex-direction: column;
+  justify-content: center;
+
+  padding: 0 30px;
+}
+
+.flex-button {
+  display: flex;
+  align-items: center;
+}
+
+.button-icon {
+  margin-left: 10px;
+}
+
+button {
+  height: 50px;
+  padding: 0 10px;
+
+  background: linear-gradient(90deg, #5966DD 0%, #C8168F 100%);
+  border: 3px solid white;
+  border-radius: 42px;
+
+  transition: border 0.1s linear;
+}
+
+button:hover {
+  cursor: pointer;
+  border-width: 0px;
+}
+
+.wave-info {
+  margin: 10px 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100% !important;
+}
+
+.input-quantity {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  height: 50px;
+  width: 80%;
+
+  border: 3px solid white;
+  border-radius: 42px;
+
+  margin: 10px 0;
+}
+
+.quantity-mod {
+  cursor: pointer;
+  margin: 0 10px
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+  width: 80%;
+
+  margin: 10px 0;
+}
+
+.mint-button {
+  width: 100%;
+}
+
+.no-bg-button {
+  transition: font-size 0.1s linear;
+}
+
+.no-bg-button:hover {
+  cursor: pointer;
+  font-size: 1.4rem;
+}
+
+/* WAVE 1 HOLDERS */
+
+.table-container {
+  display: flex;
+  justify-content: center;
+}
+
+table {
+  text-align: center;
+  border-collapse: collapse;
+  margin-bottom: 50px;
+
+  width: 100%;
+}
+
+table, th, td {
+  border: 2px solid white;
+}
+
+th, td {
+  padding: 12px 15px;
+}
+
+.container-row {
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  align-self: center;
+}
+
+.layer-1 {
+  width: 100%;
+}
+
+.layer-2 {
+  margin-left: -100%;
+}
+
+/* RESPONSIVE */
+
+@media only screen and (max-width: 1200px) {
+  .flex-m { 
+    flex-direction: column;
+  }
+
+  .flex-m > div {
+    width: 100%;
+  }
+
+  button, .mint-button {
+    margin-bottom: 0 0 50px 0;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  body {
+    padding: 0 50px;
+  }
+}
+
+@media only screen and (max-width: 880px) {
+  .button-container {
+    flex-direction: column;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .container-row {
+    flex-direction: column-reverse;
+  }
+  .layer-2 {
+    margin-left: 0;
+  }
+  td, th {
+    font-size: 1rem;
+  }
+}
+
+@media only screen and (max-width: 550px) {
+  body {
+    padding: 0 20px;
+  }
+  
+  h1 {
+    font-size: 2rem;
+  }
+  
+  h2 {
+    font-size: 1.8rem;
+  }
+  
+  p, p.mint-counter, button, .t-button, .mint-button {
+    font-size: 1rem;
+  }
+
+  td, th {
+    font-size: 0.6rem;
+  }
+
+  .no-bg-button:hover {
+    font-size: 1.1rem;
+  }
+}
+
+@media only screen and (max-width: 350px) {
+  td, th {
+    font-size: 0.4rem;
+  }
 }

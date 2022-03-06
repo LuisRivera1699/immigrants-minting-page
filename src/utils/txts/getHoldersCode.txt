@@ -1,0 +1,68 @@
+const [currentAccount, setCurrentAccount] = useState();
+
+  const checkIfWalletIsConnected = async () => {
+    const {ethereum} = window;
+
+    if (!ethereum) {
+      console.log("Hey, go and install Metamask!");
+      return;
+    }
+
+    const accounts = await ethereum.request({method: 'eth_accounts'});
+
+    if (accounts.length !== 0) {
+      const account = accounts[0];
+      setCurrentAccount(account);
+    } else {
+      console.log("No authorized account found!");
+      connectWallet();
+    }
+  }
+
+  const connectWallet = async () => {
+    try {
+      const {ethereum} = window;
+
+      if (!ethereum) {
+        console.log("Hey, go and install Metamask!");
+      }
+
+      const accounts = await ethereum.request({method: 'eth_requestAccounts'});
+
+      setCurrentAccount(accounts[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const getCurrentHoldersAndTokenId = async () => {
+    try {
+      const {ethereum} = window;
+
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const connectedContract = new ethers.Contract(WAVE_1_CONTRACT, Wave1Passes.abi, signer);
+
+        var s = 'id,address\n'
+
+        for (let i = 1; i <= 1000; i++) {
+          const ownerById = await connectedContract.ownerOf(i);
+          console.log(`Token ID ${i} ||| ${ownerById}`);
+          s = s + `${i},${ownerById}\n`;
+        }
+
+        console.log(s);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    if (!currentAccount) {
+      checkIfWalletIsConnected();
+    } else {
+      getCurrentHoldersAndTokenId();
+    }
+  });
