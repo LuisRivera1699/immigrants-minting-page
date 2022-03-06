@@ -9,8 +9,8 @@ const Header = (props) => {
                 <div className="flex-space-between">
                     <img src={logo} alt=""/>
                     <div className="flex-space-between">
-                        <img src={discord} alt=""/>
-                        <img className="twitter" src={twitter} alt=""/>
+                        <a href="https://discord.com/invite/edjf8ms5Wn" target="_blank" rel="noreferrer"><img src={discord} alt=""/></a>
+                        <a href="https://twitter.com/CinSityDAO" target="_blank" rel="noreferrer"><img className="twitter" src={twitter} alt=""/></a>
                     </div>
                 </div>
             </header> 
