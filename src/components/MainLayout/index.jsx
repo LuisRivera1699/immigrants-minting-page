@@ -1,7 +1,7 @@
 import Header from "../Header";
 import Title from "../Title";
 
-import passGif from "../../assets/finalgoldnft1.gif";
+import passGif from "../../assets/fpassgif.gif";
 
 const MainLayout = (props) => {
     return(

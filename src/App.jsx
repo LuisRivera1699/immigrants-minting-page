@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import ConnectWallet from "./views/ConnectWallet";
 import Wave1 from "./views/Wave1";
 import Wave1Holders from "./views/Wave1Holders";
@@ -7,10 +7,12 @@ import Wave2And3 from "./views/Wave2And3";
 const App = () => {
   const [currentAccount, setCurrentAccount] = useState();
 
-  const [currentWave, setCurrentWave] = useState(1);
+  // const [currentWave, setCurrentWave] = useState(1);
+  const currentWave = 1;
   const [viewWave1Holders, setViewWave1Holders] = useState(false);
 
-  const [totalMinted, setTotalMinted] = useState(0);
+  // const [totalMinted, setTotalMinted] = useState(0);
+  const totalMinted = 0;
 
   const checkIfWalletIsConnected = async () => {
     const {ethereum} = window;
