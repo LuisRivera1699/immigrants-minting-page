@@ -74,7 +74,7 @@ const App = () => {
     if (currentAccount) {
       getCurrentStage();
     }
-  }, [currentAccount])
+  });
 
   useEffect(() => {
     console.log("Whitelist user: ", inWhitelist);
