@@ -167,7 +167,7 @@ const App = () => {
         const connectedContract = new ethers.Contract(FOUNDERS_PASS_CONTRACT, FoundersPassContractAbi.abi, signer);
         const connectedWrldContract = new ethers.Contract(WRLD_CONTRACT, WRLDContractAbi.abi, signer);
 
-        let approveTxn = await connectedWrldContract.approve(WRLD_CONTRACT, ethers.utils.parseEther(`${wrldAmount}`));
+        let approveTxn = await connectedWrldContract.approve(FOUNDERS_PASS_CONTRACT, ethers.utils.parseEther(`${wrldAmount}`));
         
         console.log("Succesfully approved NFTWorlds contract to transfer the $WRLD amount set.")
         
