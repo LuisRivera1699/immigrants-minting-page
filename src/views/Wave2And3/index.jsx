@@ -7,6 +7,8 @@ const Wave2And3 = (props) => {
             <Wave2And3Layout
                 wave={props.wave}
                 totalMinted={props.totalMinted}
+                mintWithEth={props.mintWithEth}
+                mintWithWrld={props.mintWithWrld}
             />
         </MainLayout>
     );

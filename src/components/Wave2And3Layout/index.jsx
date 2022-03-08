@@ -47,9 +47,19 @@ const Wave2And3Layout = (props) => {
 
     const getDecimals = () => {
         if (props.wave === '2WL') {
-            return 3;
+            return 4;
         } else if (props.wave === 2 || props.wave === 3) {
-            return 2;
+            return 3;
+        }
+    }
+
+    const mint = () => {
+        if (tokenSymbol === 'ETH') {
+            props.mintWithEth((ethUnitPrice*mintQuantity).toFixed(getDecimals()), mintQuantity);
+        }
+
+        if (tokenSymbol === 'WRLD') {
+            props.mintWithWrld(wrldUnitPrice*mintQuantity, mintQuantity);
         }
     }
 
@@ -71,7 +81,7 @@ const Wave2And3Layout = (props) => {
                     <img className="quantity-mod" src={plus} alt="" onClick={handlePlusMintingQuantity}/>
                 </div>
                 <div className="button-container">
-                    <button className="mint-button">
+                    <button className="mint-button" onClick={mint}>
                         {
                             totalMinted === totalSupply ?
                             'SOLD OUT' :
