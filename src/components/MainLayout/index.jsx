@@ -9,7 +9,7 @@ const MainLayout = (props) => {
             <Header/>
             <Title
                 blue="Mint your"
-                pink=" Founders pass"
+                pink=" Founders Pass"
             />
             <div className="flex-m">
                 <div className="gif-container">
