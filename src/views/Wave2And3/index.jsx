@@ -9,6 +9,7 @@ const Wave2And3 = (props) => {
                 totalMinted={props.totalMinted}
                 mintWithEth={props.mintWithEth}
                 mintWithWrld={props.mintWithWrld}
+                inWhitelist={props.inWhitelist}
             />
         </MainLayout>
     );

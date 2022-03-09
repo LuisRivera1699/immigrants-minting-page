@@ -1,4 +1,4 @@
-import { WAVE_INFO } from "../../utils/constants/constants";
+import { FOUNDERS_PASS_CONTRACT, WAVE_INFO } from "../../utils/constants/constants";
 
 const CongratulationsLayout = (props) => {
     return(
@@ -7,13 +7,12 @@ const CongratulationsLayout = (props) => {
                 Successfully Minted
             </h2>
             <p className="wave-info">
-                Congratulations! You have successfully minted your 
-                {WAVE_INFO[props.wave].title} Founder’s Pass.
+                Congratulations! You have successfully minted your {WAVE_INFO[props.wave].title} Founders Pass.
             </p>
             <p className="mint-counter">
                 {props.mintQuantity} minted
             </p>
-            <button>
+            <button onClick={() => {window.open(`https://opensea.io/collection/${FOUNDERS_PASS_CONTRACT}`, "_blank")}}>
                 GO TO OPENSEA
             </button>
         </div>

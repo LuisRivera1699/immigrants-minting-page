@@ -14,6 +14,8 @@ const Wave2And3Layout = (props) => {
     const [wrldUnitPrice, setWrldUnitPrice] = useState(0);
     const [tokenSymbol, setTokenSymbol] = useState('ETH');
 
+    const [isMinting, setIsMinting] = useState(false);
+
     useEffect(() => {
         if (props.wave === 2 || props.wave === 3 || props.wave === '2WL') {
             setTitle(WAVE_INFO[props.wave].title);
@@ -47,19 +49,38 @@ const Wave2And3Layout = (props) => {
 
     const getDecimals = () => {
         if (props.wave === '2WL') {
-            return 4;
-        } else if (props.wave === 2 || props.wave === 3) {
             return 3;
+        } else if (props.wave === 2 || props.wave === 3) {
+            return 2;
         }
     }
 
-    const mint = () => {
+    const mint = async () => {
+        setIsMinting(true);
+        if ((props.wave === '2WL' && !props.inWhitelist) || (totalMinted + mintQuantity > totalSupply)) {
+            setIsMinting(false);
+            return;
+        }
         if (tokenSymbol === 'ETH') {
-            props.mintWithEth((ethUnitPrice*mintQuantity).toFixed(getDecimals()), mintQuantity);
+            await props.mintWithEth((ethUnitPrice*mintQuantity).toFixed(getDecimals()), mintQuantity);
+            setIsMinting(false);
         }
 
         if (tokenSymbol === 'WRLD') {
-            props.mintWithWrld(wrldUnitPrice*mintQuantity, mintQuantity);
+            await props.mintWithWrld(wrldUnitPrice*mintQuantity, mintQuantity);
+            setIsMinting(false);
+        }
+    }
+
+    const getDisabled = () => {
+        if  (isMinting) {
+            return true;
+        }
+        if (props.wave === '2WL' && !props.inWhitelist) {
+            return true;
+        }
+        if (totalMinted + mintQuantity > totalSupply) {
+            return true;
         }
     }
 
@@ -81,10 +102,14 @@ const Wave2And3Layout = (props) => {
                     <img className="quantity-mod" src={plus} alt="" onClick={handlePlusMintingQuantity}/>
                 </div>
                 <div className="button-container">
-                    <button className="mint-button" onClick={mint}>
+                    <button className="mint-button" disabled={getDisabled()} onClick={mint}>
                         {
-                            totalMinted === totalSupply ?
-                            'SOLD OUT' :
+                            isMinting ?
+                            <div className="lds-circle"><div></div></div> :
+                            props.wave === '2WL' && !props.inWhitelist ?
+                            'NOT WHITELISTED' :
+                            totalMinted + mintQuantity > totalSupply ?
+                            'WOULD EXCEED' :
                             tokenSymbol === 'ETH' ?
                             `MINT ${(ethUnitPrice*mintQuantity).toFixed(getDecimals())} $ETH` :
                             `MINT ${wrldUnitPrice*mintQuantity} $WRLD`

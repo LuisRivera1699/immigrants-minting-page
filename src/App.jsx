@@ -5,6 +5,7 @@ import FoundersPassContractAbi from "./utils/json/FoundersPassContractAbi.json";
 import WRLDContractAbi from "./utils/json/WRLDContractAbi.json";
 import Congratulations from "./views/Congratulations";
 import ConnectWallet from "./views/ConnectWallet";
+import SoldOut from "./views/SoldOut";
 import Wave1 from "./views/Wave1";
 import Wave1Holders from "./views/Wave1Holders";
 import Wave2And3 from "./views/Wave2And3";
@@ -22,6 +23,8 @@ const App = () => {
   const [viewContratulations, setViewCongratulations] = useState(false);
 
   const [inWhitelist, setInWhitelist] = useState(false);
+
+  const [soldOut, setSoldOut] = useState(false);
 
   const checkIfWalletIsConnected = async () => {
     const {ethereum} = window;
@@ -99,6 +102,9 @@ const App = () => {
           setCurrentWave(2);
         } else if (stageNumber === 2) {
           setCurrentWave(3);
+        } else if (stageNumber === 3) {
+          setSoldOut(true);
+          return;
         }
 
         if (stageNumber === 0 || stageNumber === 1) {
@@ -120,6 +126,7 @@ const App = () => {
         alert('Man, go and install Metamask!');
       }
     } catch (error) {
+      alert("An error has ocurred, refresh the page and try again.");
       console.log(error);
     }
   }
@@ -153,6 +160,7 @@ const App = () => {
         alert('Man, go and install Metamask!');
       }
     } catch (error) {
+      alert("An error has ocurred, refresh the page and try again.");
       console.log(error);
     }
   }
@@ -193,8 +201,15 @@ const App = () => {
         alert('Man, go and install Metamask!');
       }
     } catch (error) {
+      alert("An error has ocurred, refresh the page and try again.");
       console.log(error);
     }
+  }
+
+  if (soldOut) {
+    return(
+      <SoldOut/>
+    );
   }
 
   if (viewContratulations) {
@@ -227,6 +242,7 @@ const App = () => {
             totalMinted={totalMintedSoFar}
             mintWithEth={mintWithEth}
             mintWithWrld={mintWithWrld}
+            inWhitelist={inWhitelist}
           />
         );
       }
