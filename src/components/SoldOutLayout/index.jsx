@@ -9,7 +9,7 @@ const SoldOutLayout = (props) => {
             <p className="wave-info">
                 CinSity DAO Founders Passes for Wave 1, Wave 2 and Wave 3 have been sold out! You can check out the OpenSea Collection to buy it.
             </p>
-            <button onClick={() => {window.open(`https://opensea.io/collection/${FOUNDERS_PASS_CONTRACT}`, "_blank")}}>
+            <button onClick={() => {window.open(`https://opensea.io/collection/cinsity-dao-founders-pass-wave-2-and-wave-3`, "_blank")}}>
                 GO TO OPENSEA
             </button>
         </div>
