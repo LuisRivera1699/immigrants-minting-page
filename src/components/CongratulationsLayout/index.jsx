@@ -1,4 +1,4 @@
-import { FOUNDERS_PASS_CONTRACT, WAVE_INFO } from "../../utils/constants/constants";
+import { WAVE_INFO } from "../../utils/constants/constants";
 
 const CongratulationsLayout = (props) => {
     return(

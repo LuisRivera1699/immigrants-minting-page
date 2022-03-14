@@ -1,5 +1,3 @@
-import { FOUNDERS_PASS_CONTRACT } from "../../utils/constants/constants";
-
 const SoldOutLayout = (props) => {
     return(
         <div className="flex-m c">
