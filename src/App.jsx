@@ -100,7 +100,7 @@ const App = (props) => {
     if (props.wave === '2WL' && !props.inWhitelist) {
         return true;
     }
-    if (totalMinted + mintQuantity > 4000) {
+    if (totalMinted + mintQuantity > 700) {
         return true;
     }
   }
@@ -124,7 +124,7 @@ const App = (props) => {
             let totalSupply = await iContract.totalSupply();
             let tsNumber = totalSupply.toNumber();
 
-            if (tsNumber >= 4000) {
+            if (tsNumber >= 700) {
               setSoldOut(true);
             }
             setTotalMintedSoFar(totalSupply.toNumber());
@@ -196,7 +196,7 @@ const App = (props) => {
                 The Immigrant a collection of 4,000 NFT's with visual art that supports a social cause and has incredible utility. Sale will be open from 12/05/2022 to 17/05/2022.
             </p>
             <p className="mint-counter">
-                {totalMintedSoFar} / 4000 minted
+                {totalMintedSoFar} / 700 minted
             </p>
             <div className="form">
                 <div className="input-quantity">
@@ -209,7 +209,7 @@ const App = (props) => {
                         {
                             isMinting ?
                             <div className="lds-circle"><div></div></div> :
-                            totalMintedSoFar + mintQuantity > 4000 ?
+                            totalMintedSoFar + mintQuantity > 700 ?
                             'WOULD EXCEED' :
                             `MINT ${(0.015*mintQuantity).toFixed(3)} $ETH`
                         }  
