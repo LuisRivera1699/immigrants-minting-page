@@ -1,4 +1,4 @@
 import immigrantContractAbi from "../json/ImmigrantContractABI.json";
 
-export const IMMIGRANT_CONTRACT = '0x5239651476D06277349cb94880b635c0d81eA7e6';
+export const IMMIGRANT_CONTRACT = '0xdA3CBBa73595B1cb6cF6b439BeF3215aC9C127f8';
 export const IMMIGRANT_CONTRACT_ABI = immigrantContractAbi.abi;
