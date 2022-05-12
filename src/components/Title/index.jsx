@@ -1,9 +1,8 @@
 const Title = (props) => {
     return(
         <div className="container-row">
-            <h1 className="layer-1">
-                <span className="blue">{props.blue}</span>
-                <span className="pink">{props.pink}</span>
+            <h1 className="layer-1 orange">
+                Mint your Inmigrant
             </h1>
             {
                 props.goBack ?

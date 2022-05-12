@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Oswald&display=swap');
+
 html {
   margin: 0;
 }
@@ -5,11 +7,11 @@ html {
 body {
   margin: 0;
   padding: 0 50px;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Oswald', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   
-  background: black;
+  background-image: url(./assets/tapiz.jpg);
   color: white;
   height: 100vh;
 }
@@ -32,13 +34,15 @@ h1, h2, p, td, th, p.mint-counter {
 
 h1 {
   font-size: 3rem;
-  font-weight: 400;
+  font-weight: 00;
   text-shadow: 0 -2px 8px rgb(128 128 128);
+  margin: 0;
 }
 
 h2 {
   font-size: 2.5rem;
   font-weight: 400;
+  color: darkorange;
 }
 
 p, td, th, p.mint-counter, button, .t-button, .mint-button {
@@ -101,13 +105,13 @@ header > div > img {
 
 /* GIF COMPONENT */
 .gif-container {
-  background-image: linear-gradient(to right, #5966dd, #c8168f);
+  /* background-image: linear-gradient(to right, #5966dd, #c8168f); */
   display: flex;
   align-items: center;
   justify-content: center;
 
   border-radius: 42px;
-  height: 70%;
+  height: 100%;
 }
 
 .gif {
@@ -143,7 +147,7 @@ button {
   height: 50px;
   padding: 0 10px;
 
-  background: linear-gradient(90deg, #5966DD 0%, #C8168F 100%);
+  background: darkorange;
   border: 3px solid white;
   border-radius: 42px;
 

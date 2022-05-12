@@ -1,30 +1,28 @@
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
-import { FOUNDERS_PASS_CONTRACT, WRLD_CONTRACT } from "./utils/constants/constants";
-import FoundersPassContractAbi from "./utils/json/FoundersPassContractAbi.json";
-import WRLDContractAbi from "./utils/json/WRLDContractAbi.json";
+import MainLayout from "./components/MainLayout";
 import Congratulations from "./views/Congratulations";
 import ConnectWallet from "./views/ConnectWallet";
 import SoldOut from "./views/SoldOut";
-import Wave1 from "./views/Wave1";
-import Wave1Holders from "./views/Wave1Holders";
-import Wave2And3 from "./views/Wave2And3";
+import minus from "./assets/minus.png";
+import plus from "./assets/plus.png";
+import { IMMIGRANT_CONTRACT, IMMIGRANT_CONTRACT_ABI } from "./utils/constants/constants";
 
-
-const App = () => {
+const App = (props) => {
   const [currentAccount, setCurrentAccount] = useState();
 
-  const [currentWave, setCurrentWave] = useState(1);
-  const [viewWave1Holders, setViewWave1Holders] = useState(false);
-
-  const [totalMintedSoFar, setTotalMintedSoFar] = useState(0);
   const [totalMinted, setTotalMinted] = useState();
 
   const [viewContratulations, setViewCongratulations] = useState(false);
 
-  const [inWhitelist, setInWhitelist] = useState(false);
-
   const [soldOut, setSoldOut] = useState(false);
+
+  const [mintQuantity, setMintQuantity] = useState(1);
+  const [isMinting, setIsMinting] = useState(false);
+
+  const [totalMintedSoFar, setTotalMintedSoFar] = useState(0);
+
+
 
   const checkIfWalletIsConnected = async () => {
     const {ethereum} = window;
@@ -40,10 +38,10 @@ const App = () => {
       const account = accounts[0];
       setCurrentAccount(account);
 
-      let chainId = await ethereum.request({method: 'eth_chainId'});
-      if (chainId !== "0x1") {
-        alert("You are connected to another network. Please switch your Metamask to Ethereum Mainnet and update the page.");
-      }
+      // let chainId = await ethereum.request({method: 'eth_chainId'});
+      // if (chainId !== "0x1") {
+      //   alert("You are connected to another network. Please switch your Metamask to Ethereum Mainnet and update the page.");
+      // }
     }
   }
 
@@ -60,10 +58,10 @@ const App = () => {
 
       setCurrentAccount(accounts[0]);
 
-      let chainId = await ethereum.request({method: 'eth_chainId'});
-      if (chainId !== "0x1") {
-        alert("You are connected to another network. Please switch your Metamask to Ethereum Mainnet and update the page.");
-      }
+      // let chainId = await ethereum.request({method: 'eth_chainId'});
+      // if (chainId !== "0x1") {
+      //   alert("You are connected to another network. Please switch your Metamask to Ethereum Mainnet and update the page.");
+      // }
     } catch (error) {
       console.log(error);
     }
@@ -83,137 +81,88 @@ const App = () => {
     }
   });
 
+  const handleMinusMintingQuantity = () => {
+    if (mintQuantity > 1) {
+        setMintQuantity(mintQuantity - 1);
+    }
+  }
+
+  const handlePlusMintingQuantity = () => {
+    if (mintQuantity < 6) {
+        setMintQuantity(mintQuantity + 1);
+    }
+  }
+
+  const getDisabled = () => {
+    if  (isMinting) {
+        return true;
+    }
+    if (props.wave === '2WL' && !props.inWhitelist) {
+        return true;
+    }
+    if (totalMinted + mintQuantity > 4000) {
+        return true;
+    }
+  }
+
   useEffect(() => {
     if (currentAccount) {
-      getCurrentStage();
+      getTotalMintedSoFar();
     }
-  });
+  })
 
-  useEffect(() => {
-    console.log("Whitelist user: ", inWhitelist);
-  }, [inWhitelist]);
-
-  const getCurrentStage = async () => {
+  const getTotalMintedSoFar = async () => {
     try {
-      const { ethereum } = window;
+        const { ethereum } = window;
 
-      if (ethereum) {
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-        const connectedContract = new ethers.Contract(FOUNDERS_PASS_CONTRACT, FoundersPassContractAbi.abi, signer);
+        if (ethereum) {
 
-        let currentStage = await connectedContract.stage();
+            const provider = new ethers.providers.Web3Provider(ethereum);
+            const signer = provider.getSigner();
+            const iContract = new ethers.Contract(IMMIGRANT_CONTRACT, IMMIGRANT_CONTRACT_ABI, signer);
 
-        let stageNumber = currentStage.toNumber();
+            let totalSupply = await iContract.totalSupply();
+            let tsNumber = totalSupply.toNumber();
 
-        if (stageNumber === 0) {
-          setCurrentWave('2WL');
-        } else if (stageNumber === 1) {
-          setCurrentWave(2);
-        } else if (stageNumber === 2) {
-          setCurrentWave(3);
-        } else if (stageNumber === 3) {
-          setSoldOut(true);
-          return;
+            if (tsNumber >= 4000) {
+              setSoldOut(true);
+            }
+            setTotalMintedSoFar(totalSupply.toNumber());
+        
+        } else {
+            alert("Man, go and get Metamask!");
         }
-
-        if (stageNumber === 0 || stageNumber === 1) {
-          let tMinted = await connectedContract.totalSupply(0);
-          setTotalMintedSoFar(tMinted.toNumber());
-        } else if (stageNumber === 2) {
-          let tMinted = await connectedContract.totalSupply(1);
-          setTotalMintedSoFar(tMinted.toNumber());
-        }
-
-        if (stageNumber === 0) {
-          let wl = await connectedContract.isWhiteListed(currentAccount);
-          setInWhitelist(wl);
-        }
-
-        console.log("Successfully obtained the Wave and TotalMinted!");
-
-      } else {
-        alert('Man, go and install Metamask!');
-      }
     } catch (error) {
-      alert("An error has ocurred, refresh the page and try again.");
-      console.log(error);
+        alert("An error has ocurred, refresh the page and try again.");
+        console.error(error);
     }
   }
 
-  const mintWithEth = async (ethAmount, totalQuantity) => {
+  const mint = async () => {
+    setIsMinting(true);
     try {
-      const { ethereum } = window;
+        const { ethereum } = window;
 
-      if (ethereum) {
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-        const connectedContract = new ethers.Contract(FOUNDERS_PASS_CONTRACT, FoundersPassContractAbi.abi, signer);
+        if (ethereum) {
 
-        let mintTxn;
+            const provider = new ethers.providers.Web3Provider(ethereum);
+            const signer = provider.getSigner();
+            const iContract = new ethers.Contract(IMMIGRANT_CONTRACT, IMMIGRANT_CONTRACT_ABI, signer);
 
-        if (currentWave === '2WL') {
-          mintTxn = await connectedContract.mintPresaleWithEth(totalQuantity, {value: ethers.utils.parseEther(`${ethAmount}`)});
-        } else if (currentWave === 2) {
-          mintTxn = await connectedContract.mintWave2WithEth(totalQuantity, {value: ethers.utils.parseEther(`${ethAmount}`)});
-        } else if (currentWave === 3) {
-          mintTxn = await connectedContract.mintWave3WithEth(totalQuantity, {value: ethers.utils.parseEther(`${ethAmount}`)});
-        } else {
-          throw Error("Not recognized stage value.");
-        }
-
-        await mintTxn.wait();
-
-        setTotalMinted(totalQuantity);
-        setViewCongratulations(true);
-      } else {
-        alert('Man, go and install Metamask!');
-      }
-    } catch (error) {
-      alert("An error has ocurred, refresh the page and try again.");
-      console.log(error);
-    }
-  }
-
-  const mintWithWrld = async (wrldAmount, totalQuantity) => {
-    try {
-      const { ethereum } = window;
-
-      if (ethereum) {
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-        const connectedContract = new ethers.Contract(FOUNDERS_PASS_CONTRACT, FoundersPassContractAbi.abi, signer);
-        const connectedWrldContract = new ethers.Contract(WRLD_CONTRACT, WRLDContractAbi.abi, signer);
-
-        let approveTxn = await connectedWrldContract.approve(FOUNDERS_PASS_CONTRACT, ethers.utils.parseEther(`${wrldAmount}`));
+            let mintTxn = await iContract.presaleMint(mintQuantity, {value: ethers.utils.parseEther(`${0.015 * mintQuantity}`)});
         
-        console.log("Succesfully approved NFTWorlds contract to transfer the $WRLD amount set.")
-        
-        await approveTxn.wait();
+            await mintTxn.wait();
+            setViewCongratulations(true);
+            setTotalMinted(mintQuantity);
 
-        let mintTxn;
-
-        if (currentWave === '2WL') {
-          mintTxn = await connectedContract.mintPresaleWithWrld(totalQuantity);
-        } else if (currentWave === 2) {
-          mintTxn = await connectedContract.mintWave2WithWrld(totalQuantity);
-        } else if (currentWave === 3) {
-          mintTxn = await connectedContract.mintWave3WithWrld(totalQuantity);
         } else {
-          throw Error("Not recognized stage value.");
+            alert("Man, go and get Metamask!");
         }
-
-        await mintTxn.wait();
-
-        setTotalMinted(totalQuantity);
-        setViewCongratulations(true);
-      } else {
-        alert('Man, go and install Metamask!');
-      }
     } catch (error) {
-      alert("An error has ocurred, refresh the page and try again.");
-      console.log(error);
+        alert("An error has ocurred, refresh the page and try again.");
+        console.error(error);
     }
+    setIsMinting(false);
   }
 
   if (soldOut) {
@@ -225,7 +174,6 @@ const App = () => {
   if (viewContratulations) {
     return(
       <Congratulations
-        wave={currentWave}
         mintQuantity={totalMinted}
       />
     );
@@ -238,33 +186,40 @@ const App = () => {
       />
     );
   } else {
-    if (!viewWave1Holders) {
-      if (currentWave === 1) {
-        return(
-          <Wave1
-            setViewWave1Holders={setViewWave1Holders}
-          />
-        );
-      } else if (['2WL', 2, 3].includes(currentWave)) {
-        return (
-          <Wave2And3
-            wave={currentWave}
-            totalMinted={totalMintedSoFar}
-            mintWithEth={mintWithEth}
-            mintWithWrld={mintWithWrld}
-            inWhitelist={inWhitelist}
-          />
-        );
-      }
-    } else {
-      return(
-        <Wave1Holders
-          setViewWave1Holders={setViewWave1Holders}
-        />
-      );
-    }
+    return (
+      <MainLayout>
+        <div className="flex-m c">
+            <h2 className="subtitle">
+                Mint Your Inmigrant
+            </h2>
+            <p className="wave-info">
+                The Immigrant a collection of 4,000 NFT's with visual art that supports a social cause and has incredible utility. Sale will be open from 12/05/2022 to 17/05/2022.
+            </p>
+            <p className="mint-counter">
+                {totalMintedSoFar} / 4000 minted
+            </p>
+            <div className="form">
+                <div className="input-quantity">
+                    <img className="quantity-mod" src={minus} alt="" onClick={handleMinusMintingQuantity}/>
+                    <p>{mintQuantity}</p>
+                    <img className="quantity-mod" src={plus} alt="" onClick={handlePlusMintingQuantity}/>
+                </div>
+                <div className="button-container">
+                    <button className="mint-button" disabled={getDisabled()} onClick={mint}>
+                        {
+                            isMinting ?
+                            <div className="lds-circle"><div></div></div> :
+                            totalMintedSoFar + mintQuantity > 4000 ?
+                            'WOULD EXCEED' :
+                            `MINT ${(0.015*mintQuantity).toFixed(3)} $ETH`
+                        }  
+                    </button>
+                </div>
+            </div>
+        </div>
+      </MainLayout>
+    );
   }
-
 }
 
 export default App;
