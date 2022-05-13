@@ -159,7 +159,7 @@ const App = (props) => {
             alert("Man, go and get Metamask!");
         }
     } catch (error) {
-        alert("An error has ocurred, refresh the page and try again.");
+        alert(error.message);
         console.error(error);
     }
     setIsMinting(false);
