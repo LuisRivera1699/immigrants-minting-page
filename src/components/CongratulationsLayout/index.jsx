@@ -10,8 +10,8 @@ const CongratulationsLayout = (props) => {
             <p className="mint-counter">
                 {props.mintQuantity} minted
             </p>
-            <button onClick={() => {window.open(`https://opensea.io/collection/the-immigrant-col`, "_blank")}}>
-                GO TO OPENSEA
+            <button onClick={() => {window.open(`https://looksrare.org/collections/0x5583651fD633cEd5439F923bc0510Ea1A121542C`, "_blank")}}>
+                GO TO LOOKSRARE
             </button>
         </div>
     );
