@@ -193,7 +193,7 @@ const App = (props) => {
                 Mint Your Inmigrant
             </h2>
             <p className="wave-info">
-                The Immigrant a collection of 4,000 NFT's with visual art that supports a social cause and has incredible utility. Sale will be open from 12/05/2022 to 17/05/2022.
+                The Immigrant a collection of 4,000 NFT's with visual art that supports a social cause and has incredible utility.
             </p>
             <p className="mint-counter">
                 {totalMintedSoFar} / 700 minted
