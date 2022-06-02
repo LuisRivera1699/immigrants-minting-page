@@ -23,6 +23,7 @@ const App = (props) => {
   const [totalMintedSoFar, setTotalMintedSoFar] = useState(0);
 
   const [estimatedGas, setEstimatedGas] = useState(0);
+  const [estimatedGasUsdPrice, setEstimatedGasUsdPrice] = useState(0);
 
 
 
@@ -183,8 +184,12 @@ const App = (props) => {
         const mintMethodE = await iContract.estimateGas.presaleMint(mintQuantity, {value: ethers.utils.parseEther(`${0.015*mintQuantity}`)});
         const gasPrice = await provider.getGasPrice();
         const finalGas = mintMethodE.toNumber()*gasPrice.toNumber();
-
-        setEstimatedGas(parseFloat(ethers.utils.formatEther(finalGas)));
+        const floatFinalGas = parseFloat(ethers.utils.formatEther(finalGas));
+        const ethUsdValue = await fetch("https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETH&tsyms=USD");
+        const resp = await ethUsdValue.json();
+        
+        setEstimatedGasUsdPrice(resp.ETH.USD*floatFinalGas);
+        setEstimatedGas(floatFinalGas);
       }
 
     } catch (error) {
@@ -232,7 +237,7 @@ const App = (props) => {
                     <p>{mintQuantity}</p>
                     <img className="quantity-mod" src={plus} alt="" onClick={handlePlusMintingQuantity}/>
                 </div>
-                <p>Gas Price: {estimatedGas.toFixed(4)} ETH</p>
+                <p>Gas Price: {estimatedGas.toFixed(4)} ETH ({estimatedGasUsdPrice.toFixed(2)} $USD)</p>
                 <div className="button-container">
                     <button className="mint-button" disabled={getDisabled()} onClick={mint}>
                         {
