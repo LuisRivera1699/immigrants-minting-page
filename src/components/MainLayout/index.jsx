@@ -1,5 +1,4 @@
 import Header from "../Header";
-import Title from "../Title";
 
 import video from "../../assets/video.mp4"
 

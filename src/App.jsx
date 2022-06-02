@@ -22,6 +22,8 @@ const App = (props) => {
 
   const [totalMintedSoFar, setTotalMintedSoFar] = useState(0);
 
+  const [estimatedGas, setEstimatedGas] = useState(0);
+
 
 
   const checkIfWalletIsConnected = async () => {
@@ -69,6 +71,10 @@ const App = (props) => {
 
   useEffect(() => {
     checkIfWalletIsConnected();
+    const interval = setInterval(() => {
+      estimateGasFee();
+    }, 500);
+    return () => clearInterval(interval);
   });
 
   useEffect(() => {
@@ -165,6 +171,28 @@ const App = (props) => {
     setIsMinting(false);
   }
 
+  const estimateGasFee = async () => {
+    try {
+      const { ethereum } = window;
+
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const iContract = new ethers.Contract(IMMIGRANT_CONTRACT, IMMIGRANT_CONTRACT_ABI, signer);
+
+        const mintMethodE = await iContract.estimateGas.presaleMint(mintQuantity, {value: ethers.utils.parseEther(`${0.015*mintQuantity}`)});
+        const gasPrice = await provider.getGasPrice();
+        const finalGas = mintMethodE.toNumber()*gasPrice.toNumber();
+
+        setEstimatedGas(parseFloat(ethers.utils.formatEther(finalGas)));
+      }
+
+    } catch (error) {
+      alert(error.message);
+      console.error(error);
+    }
+  }
+
   if (soldOut) {
     return(
       <SoldOut/>
@@ -204,6 +232,7 @@ const App = (props) => {
                     <p>{mintQuantity}</p>
                     <img className="quantity-mod" src={plus} alt="" onClick={handlePlusMintingQuantity}/>
                 </div>
+                <p>Gas Price: {estimatedGas.toFixed(4)} ETH</p>
                 <div className="button-container">
                     <button className="mint-button" disabled={getDisabled()} onClick={mint}>
                         {
