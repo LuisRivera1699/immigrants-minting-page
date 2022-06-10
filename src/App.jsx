@@ -24,6 +24,7 @@ const App = (props) => {
 
   const [estimatedGas, setEstimatedGas] = useState(0);
   const [estimatedGasUsdPrice, setEstimatedGasUsdPrice] = useState(0);
+  const [estimateError, setEstimateError] = useState(false);
 
 
 
@@ -176,7 +177,7 @@ const App = (props) => {
     try {
       const { ethereum } = window;
 
-      if (ethereum) {
+      if (ethereum && currentAccount) {
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
         const iContract = new ethers.Contract(IMMIGRANT_CONTRACT, IMMIGRANT_CONTRACT_ABI, signer);
@@ -190,11 +191,11 @@ const App = (props) => {
         
         setEstimatedGasUsdPrice(resp.ETH.USD*floatFinalGas);
         setEstimatedGas(floatFinalGas);
+        setEstimateError(false);
       }
 
     } catch (error) {
-      alert(error.message);
-      console.error(error);
+      setEstimateError(true);
     }
   }
 
@@ -237,7 +238,7 @@ const App = (props) => {
                     <p>{mintQuantity}</p>
                     <img className="quantity-mod" src={plus} alt="" onClick={handlePlusMintingQuantity}/>
                 </div>
-                <p>Gas Price: {estimatedGas.toFixed(4)} ETH ({estimatedGasUsdPrice.toFixed(2)} $USD)</p>
+                <p>{estimateError ? 'No enough funds for minting.' : `Gas Price: ${estimatedGas.toFixed(4)} ETH (${estimatedGasUsdPrice.toFixed(2)} $USD)`}</p>
                 <div className="button-container">
                     <button className="mint-button" disabled={getDisabled()} onClick={mint}>
                         {
